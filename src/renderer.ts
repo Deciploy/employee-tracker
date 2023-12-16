@@ -1,3 +1,4 @@
+import "./index.css";
 import "./app/App";
 
 console.log(
