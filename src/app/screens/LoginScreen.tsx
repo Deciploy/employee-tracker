@@ -27,7 +27,7 @@ export const LoginScreen: React.FC = () => {
       .post('/auth/login', values)
       .then((res) => {
         if (res?.data) {
-          const { token, user } = res.data;
+          const { token, user } = res.data.data;
           const expireAt = new Date(token.expiration).getTime();
 
           signIn(token.token, expireAt, user);
