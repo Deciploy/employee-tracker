@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useAuth } from 'react-auth-utils';
-import { User } from '../models/User';
+import { User } from '../data/models/User';
 import { Avatar } from './components/Avatar';
 import Moment from 'react-moment';
 import { Timer } from './components/Timer';
@@ -13,7 +13,9 @@ export const MainScreen: React.FC = () => {
   const [time, setTime] = React.useState<number>(0);
 
   const handleLogout = () => {
-    signOut();
+    console.log(window.Electron);
+    window.Electron?.ipcRenderer.send('track', { type: 'logout' });
+    //signOut();
   };
 
   useEffect(() => {
