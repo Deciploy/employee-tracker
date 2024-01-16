@@ -13,9 +13,7 @@ export const MainScreen: React.FC = () => {
   const [time, setTime] = React.useState<number>(0);
 
   const handleLogout = () => {
-    console.log(window.Electron);
-    window.Electron?.ipcRenderer.send('track', { type: 'logout' });
-    //signOut();
+    signOut();
   };
 
   useEffect(() => {
@@ -25,6 +23,16 @@ export const MainScreen: React.FC = () => {
       }, 1000);
 
       return () => clearInterval(interval);
+    }
+  }, [tracking]);
+
+  useEffect(() => {
+    if (tracking) {
+      // Start foreground Activity Tracking
+      window.Electron?.ipcRenderer.send('track', { command: 'start' });
+    } else {
+      // Stop foreground Activity Tracking
+      window.Electron?.ipcRenderer.send('track', { command: 'stop' });
     }
   }, [tracking]);
 
