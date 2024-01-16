@@ -35,6 +35,10 @@ export const App: React.FC = () => {
         }
         return config;
       });
+
+      window.Electron?.ipcRenderer.send('token', {
+        token: authState.token,
+      });
     }
   };
 

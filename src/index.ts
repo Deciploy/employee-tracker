@@ -70,11 +70,30 @@ app.on('activate', () => {
 
 let foregroundTrackWorker: Worker;
 
+const dataSyncWorker: Worker = new Worker(
+  './src/app/workers/data-sync.worker.js',
+  {
+    env: {
+      API_URL: process.env.NX_APP_API_BASE_URL,
+      INTERVAL: process.env.APP_SYNC_INTERVAL,
+    },
+  },
+);
+
+ipcMain.on('token', async (event, args) => {
+  dataSyncWorker.postMessage(args);
+});
+
 ipcMain.on('track', async (event, args) => {
   if (args.command === 'start') {
-    console.log('Starting tracking');
     foregroundTrackWorker = new Worker(
       './src/app/workers/foreground-track.worker.js',
+      {
+        env: {
+          API_URL: process.env.NX_APP_API_BASE_URL,
+          INTERVAL: process.env.TRACK_INTERVAL,
+        },
+      },
     );
   } else {
     foregroundTrackWorker?.terminate();

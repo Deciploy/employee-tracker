@@ -5,8 +5,6 @@ const Activity = require('./db/Activity');
 const COMMAND =
   'powershell -command "(Get-Process | Where-Object { $_.MainWindowTitle } | Select-Object Id, Name, MainWindowTitle, StartTime, Responding | ConvertTo-Json)"';
 
-const INTERVAL_TIME = 1000 * 60; // 1 minute
-
 const runningActivity = [];
 
 function getTerminatedActivities(snapshot) {
@@ -84,4 +82,4 @@ setInterval(() => {
         });
     }
   });
-}, INTERVAL_TIME);
+}, process.env.INTERVAL);
