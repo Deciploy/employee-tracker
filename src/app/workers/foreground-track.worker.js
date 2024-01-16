@@ -5,6 +5,8 @@ const Activity = require('./db/Activity');
 const COMMAND =
   'powershell -command "(Get-Process | Where-Object { $_.MainWindowTitle } | Select-Object Id, Name, MainWindowTitle, StartTime, Responding | ConvertTo-Json)"';
 
+const INTERVAL_TIME = 1000 * 60; // 1 minute
+
 const runningActivity = [];
 
 function getTerminatedActivities(snapshot) {
@@ -19,6 +21,24 @@ function getNewActivities(snapshot) {
   );
 }
 
+function parseDate(str) {
+  // Extract the timestamp from the string using a regular expression
+  const match = str.match(/\/Date\((\d+)\)\//);
+
+  // Check if a match is found
+  if (match) {
+    // Extract the timestamp from the matched groups
+    const timestamp = parseInt(match[1], 10);
+
+    // Create a Date object using the timestamp
+    const date = new Date(timestamp);
+
+    return date;
+  } else {
+    console.error('Invalid date string format');
+  }
+}
+
 setInterval(() => {
   exec(COMMAND, (error, stdout, stderr) => {
     if (error) {
@@ -31,7 +51,10 @@ setInterval(() => {
       return;
     }
 
-    const snapshot = JSON.parse(stdout);
+    const snapshot = JSON.parse(stdout).map((s) => ({
+      ...s,
+      StartTime: parseDate(s.StartTime),
+    }));
 
     const terminatedActivities = getTerminatedActivities(snapshot);
     const newActivities = getNewActivities(snapshot);
@@ -51,14 +74,14 @@ setInterval(() => {
 
       Activity.bulkCreate(activitiesToSave)
         .then(() => {
-          runningActivity.splice(
-            runningActivity.findIndex((a) => a.Id === a.Id),
-            1,
-          );
+          terminatedActivities.forEach((a) => {
+            const index = runningActivity.findIndex((r) => r.Id === a.Id);
+            runningActivity.splice(index, 1);
+          });
         })
         .catch((err) => {
           console.error('DB error:', err);
         });
     }
   });
-}, 5000);
+}, INTERVAL_TIME);
