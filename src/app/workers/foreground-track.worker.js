@@ -77,8 +77,8 @@ setInterval(() => {
             runningActivity.splice(index, 1);
           });
         })
-        .catch((err) => {
-          console.error('DB error:', err);
+        .catch(async (err) => {
+          await Activity.sync();
         });
     }
   });

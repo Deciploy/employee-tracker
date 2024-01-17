@@ -37,12 +37,6 @@ const createWindow = (): void => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const sequelize = require('./app/workers/db/db');
-
-  sequelize.sync({ force: true }).then(() => {
-    console.log('Database & tables created!');
-  });
-
   createWindow();
 });
 

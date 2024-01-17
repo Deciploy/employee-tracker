@@ -8,32 +8,47 @@ parentPort.on('message', (message) => {
   token = message.token;
 });
 
-setInterval(() => {
+setInterval(async () => {
   if (!token) {
     return;
   }
 
-  const activitiesToSync = Activity.findAll();
+  console.log('Syncing Activities started');
 
-  fetch(`${process.env.API_URL}/track`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(activitiesToSync),
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.status) {
-        Activity.destroy({
-          where: {
-            id: data.activities.map((a) => a.id),
-          },
-        });
-      }
+  try {
+    const activitiesToSync = (
+      await Activity.findAll({
+        attributes: ['id', 'name', 'title', 'startTime', 'endTime'],
+      })
+    ).map((a) => ({
+      ...a.toJSON(),
+      startTime: a.startTime.toString(),
+      endTime: a.endTime.toString(),
+    }));
+
+    fetch(`${process.env.API_URL}/activity`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(activitiesToSync),
     })
-    .catch((error) => {
-      console.error('Network Error', error);
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Activities Synced', data);
+        if (data.status) {
+          Activity.destroy({
+            where: {
+              id: activitiesToSync.map((a) => a.id),
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('Network Error', error);
+      });
+  } catch (error) {
+    await Activity.sync();
+  }
 }, process.env.INTERVAL);
