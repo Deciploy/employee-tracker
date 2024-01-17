@@ -26,6 +26,10 @@ setInterval(async () => {
       endTime: a.endTime.toString(),
     }));
 
+    if (activitiesToSync.length === 0) {
+      return;
+    }
+
     fetch(`${process.env.API_URL}/activity`, {
       method: 'POST',
       headers: {
