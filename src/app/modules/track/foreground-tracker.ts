@@ -42,7 +42,7 @@ export class ForegroundTracker {
                 } else if (stderr) {
                     reject(stderr);
                 } else {
-                    console
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     const snapshot = JSON.parse(stdout).map((activity: any) => ({
                         pid: activity.Id,
                         name: activity.Name,
