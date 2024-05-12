@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react';
 import { useAuth } from 'react-auth-utils';
-import { User } from '../data/models/User';
+import { User } from '../data/models';
 import { Avatar } from './components/Avatar';
 import Moment from 'react-moment';
 import { Timer } from './components/Timer';
 
 export const MainScreen: React.FC = () => {
   const { user, signOut } = useAuth<User>();
-
   const [userMenuOpen, setUserMenuOpen] = React.useState(false);
   const [tracking, setTracking] = React.useState(false);
   const [time, setTime] = React.useState<number>(0);
@@ -51,7 +50,9 @@ export const MainScreen: React.FC = () => {
               <p className="text-sm font-medium text-gray-500 truncate">
                 {user?.team}
               </p>
-              <p className="text-sm text-gray-500 truncate">{user?.company}</p>
+              <p className="text-sm text-gray-500 truncate">
+                {user?.company.name}
+              </p>
             </div>
             <ul className="py-1">
               <li>
