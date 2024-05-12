@@ -20,11 +20,11 @@ export const Activity = sequelize.define('Activity', {
         allowNull: false,
     },
     startTime: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: false,
     },
     endTime: {
-        type: DataTypes.DATE,
+        type: DataTypes.STRING,
         allowNull: false,
     },
 });

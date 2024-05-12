@@ -4,11 +4,11 @@ export interface RunningForegroundActivity {
     pid: number;
     name: string;
     title: string;
-    startTime: Date;
+    startTime: string;
 }
 
 export interface TerminatedForegroundActivity extends RunningForegroundActivity {
-    endTime: Date;
+    endTime: string;
 }
 
 interface ForegroundTrackerOptions {
@@ -47,7 +47,7 @@ export class ForegroundTracker {
                         pid: activity.Id,
                         name: activity.Name,
                         title: activity.MainWindowTitle,
-                        startTime: this.parseDate(activity.StartTime),
+                        startTime: this.parseDate(activity.StartTime).toString(),
                     } as RunningForegroundActivity));
                     resolve(snapshot);
                 }
@@ -58,7 +58,7 @@ export class ForegroundTracker {
     private getTerminatedActivities(snapshot: Array<RunningForegroundActivity>): Array<TerminatedForegroundActivity> {
         return this._runningActivity
             .filter((activity) => !snapshot.some((snapshotActivity) => snapshotActivity.pid === activity.pid))
-            .map((activity) => ({ ...activity, endTime: new Date() } as TerminatedForegroundActivity))
+            .map((activity) => ({ ...activity, endTime: new Date().toString() } as TerminatedForegroundActivity))
     }
 
     private getNewActivities(snapshot: Array<RunningForegroundActivity>): Array<RunningForegroundActivity> {
