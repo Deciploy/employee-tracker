@@ -11,6 +11,8 @@ export const MainScreen: React.FC = () => {
   const [tracking, setTracking] = React.useState(false);
   const [time, setTime] = React.useState<number>(0);
 
+  console.log('user', user);
+
   const handleLogout = () => {
     signOut();
   };
@@ -48,10 +50,10 @@ export const MainScreen: React.FC = () => {
             <div className="px-4 py-3">
               <p className="text-sm text-gray-900">{user?.fullName}</p>
               <p className="text-sm font-medium text-gray-500 truncate">
-                {user?.team}
+                {user?.team?.name}
               </p>
               <p className="text-sm text-gray-500 truncate">
-                {user?.company.name}
+                {user?.company?.name}
               </p>
             </div>
             <ul className="py-1">
