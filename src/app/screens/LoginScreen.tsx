@@ -24,7 +24,7 @@ export const LoginScreen: React.FC = () => {
     setLoading(true);
     setError('');
     axios
-      .post('/auth/login', values)
+      .post('/auth/login/employee', values)
       .then((res) => {
         if (res?.data) {
           const { token, user } = res.data.data;

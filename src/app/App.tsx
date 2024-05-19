@@ -8,8 +8,6 @@ import { AuthState } from 'react-auth-utils/src/lib/types';
 import { MainScreen } from './screens/MainScreen';
 import { LoginScreen } from './screens/LoginScreen';
 
-console.log(process.env.NX_APP_API_BASE_URL);
-
 const AppRoutes = () => (
   <HashRouter basename="/">
     <Routes>
@@ -36,6 +34,10 @@ export const App: React.FC = () => {
           config.headers['Authorization'] = `Bearer ${authState.token}`;
         }
         return config;
+      });
+
+      window.Electron?.ipcRenderer.send('token', {
+        token: authState.token,
       });
     }
   };
