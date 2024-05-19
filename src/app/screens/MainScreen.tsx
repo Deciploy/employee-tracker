@@ -11,8 +11,6 @@ export const MainScreen: React.FC = () => {
   const [tracking, setTracking] = React.useState(false);
   const [time, setTime] = React.useState<number>(0);
 
-  console.log('user', user);
-
   const handleLogout = () => {
     signOut();
   };
