@@ -92,7 +92,7 @@ const capturer = new ForegroundCapturer({
   onCapture: (screenshot) => {
     if (uploadScreenshot) {
       uploadScreenshot(screenshot.url, screenshot.capturedAt).
-        then(() => console.log(`Uploaded screenshot next capture in ${screenshot.timeToNextCapture / 6000} min`))
+        then(() => console.log(`Uploaded screenshot next capture in ${screenshot.timeToNextCapture / (60 * 1000)} min`))
         .catch(console.error);
     }
   }
