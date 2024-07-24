@@ -41,6 +41,17 @@ const config: ForgeConfig = {
       },
     }),
   ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'Deciploy',
+          name: 'employee-tracker',
+        },
+      },
+    },
+  ]
 };
 
 export default config;
