@@ -14,8 +14,8 @@ jobs:
         with:
           node-version: 18.17.1
       - name: install dependencies
-        run: npm install
+        run: yarn
       - name: publish
-        run: npm run publish
+        run: yarn publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
