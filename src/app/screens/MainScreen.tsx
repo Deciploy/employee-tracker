@@ -4,14 +4,14 @@ import { User } from '../data/models';
 import { Avatar } from './components/Avatar';
 import Moment from 'react-moment';
 import { Timer } from './components/Timer';
+import axios from 'axios';
 
 export const MainScreen: React.FC = () => {
   const { user, signOut } = useAuth<User>();
   const [userMenuOpen, setUserMenuOpen] = React.useState(false);
   const [tracking, setTracking] = React.useState(false);
   const [time, setTime] = React.useState<number>(0);
-
-  console.log('user', user);
+  const [loading, setLoading] = React.useState(false);
 
   const handleLogout = () => {
     signOut();
@@ -36,6 +36,30 @@ export const MainScreen: React.FC = () => {
       window.Electron?.ipcRenderer.send('track', { command: 'stop' });
     }
   }, [tracking]);
+
+  const clockIn = async () => {
+    setLoading(true);
+    try {
+      await axios.post('/time/clock-in', { time: new Date().toString() });
+      setTracking(true);
+    } catch (error) {
+      console.error('Failed to clock in', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clockOut = async () => {
+    setLoading(true);
+    try {
+      await axios.post('/time/clock-out', { time: new Date().toString() });
+      setTracking(false);
+    } catch (error) {
+      console.error('Failed to clock out', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col h-screen">
@@ -86,15 +110,17 @@ export const MainScreen: React.FC = () => {
         <div className="flex w-full justify-center">
           {tracking ? (
             <button
-              className="bg-warning-500 hover:bg-warning-600 text-white uppercase font-bold py-4 px-8 rounded-full w-64 h-18"
-              onClick={() => setTracking(false)}
+              disabled={loading}
+              className="bg-warning-500 hover:bg-warning-600 text-white uppercase font-bold py-4 px-8 rounded-full w-64 h-18 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={clockOut}
             >
               Clock out
             </button>
           ) : (
             <button
-              className="bg-primary-500 hover:bg-primary-600 text-white uppercase font-bold py-4 px-8 rounded-full w-64 h-18"
-              onClick={() => setTracking(true)}
+              disabled={loading}
+              className="bg-primary-500 hover:bg-primary-600 text-white uppercase font-bold py-4 px-8 rounded-full w-64 h-18 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={clockIn}
             >
               Clock in
             </button>

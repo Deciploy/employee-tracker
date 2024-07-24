@@ -11,6 +11,7 @@ export const sequelize = new Sequelize(
     PASSWORD,
     {
         dialect: "sqlite",
-        dialectModule: sqlite3
+        dialectModule: sqlite3,
+        logging: false,
     }
 );
