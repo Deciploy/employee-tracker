@@ -1,7 +1,7 @@
 {
-  "name": "employee-tracker",
-  "productName": "employee-tracker",
-  "version": "1.0.0",
+  "name": "deciploy",
+  "productName": "Deciploy Tracker",
+  "version": "1.0.1",
   "description": "My Electron application description",
   "main": ".webpack/main",
   "scripts": {
