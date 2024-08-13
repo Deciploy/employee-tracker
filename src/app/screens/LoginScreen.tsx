@@ -46,7 +46,11 @@ export const LoginScreen: React.FC = () => {
   return (
     <div className="flex flex-col justify-center items-center h-screen">
       <div className="flex flex-col justify-evenly items-center w-96 h-96 bg-white rounded-lg shadow-lg">
-        <img className="h-12" src="/assets/images/logo.png" alt="logo" />
+        <img
+          className="h-12"
+          src="https://res.cloudinary.com/deciploy/image/upload/v1721834904/deciploy/logo_dpfs8q.png"
+          alt="logo"
+        />
         <h1 className="text-2xl font-medium text-gray-800">Employee | Login</h1>
         <Formik
           initialValues={initialValues}
